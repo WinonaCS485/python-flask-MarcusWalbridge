@@ -2,6 +2,27 @@ from flask import Flask, render_template
 import pymysql.cursors
 
 app = Flask(__name__)
+student = ''
+print (student)
+
+connection = pymysql.connect(host='mrbartucz.com',
+                             user='sq8822nj',
+                             password='Whyskar|3301',
+                             db='sq8822nj_Assignment_Two',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+
+try:
+    with connection.cursor() as cursor:
+        sql = "SELECT First_Name from Students"
+        cursor.execute(sql)
+
+        for result in cursor:
+            student = result
+finally:
+        connection.close()
+        
+print (student)
 
 @app.route('/')
 def index():
@@ -21,20 +42,7 @@ def default():
 
 @app.route ('/students')
 def students():
-    try:
-        with connection.cursor() as cursor:
-            # Select all Students
-            sql = "SELECT * from Students"
-        
-            # execute the SQL command
-            cursor.execute(sql)
-        
-            # get the results
-            for result in cursor:
-                print (result)
-
-    finally:
-        connection.close()
+    return (student) 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
